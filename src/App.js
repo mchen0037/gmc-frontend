@@ -15,7 +15,7 @@ let userInfoFromServer = {
   playlists: [
     {
       id: 'some_playlist_id1',
-      name: "good",
+      name: "Twenty One Pilots Songs",
       tracks: [
         {
           name: 'song 1',
@@ -29,7 +29,7 @@ let userInfoFromServer = {
     },
     {
       id: 'some_playlist_id2',
-      name: "bad",
+      name: "Top Country Songs",
       tracks: [
         {
           name: 'song 3',
@@ -38,6 +38,24 @@ let userInfoFromServer = {
         {
           name: 'song 4',
           duration: 4000
+        }
+      ]
+    },
+    {
+      id: 'some_playlist_id3',
+      name: "My Mixtape",
+      tracks: [
+        {
+          name: 'song 5',
+          duration: 3000
+        },
+        {
+          name: 'song 6',
+          duration: 4000
+        },
+        {
+          name: 'song 7',
+          duration: 5000
         }
       ]
     }
