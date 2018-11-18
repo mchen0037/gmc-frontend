@@ -1,15 +1,22 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
+import axios from 'axios';
 
 class TrainedPage extends Component {
 
-  // constructor(props) {
-  //   super(props)
-  // }
-
-  //make axios calls here, then pass state up to App.js
+  constructor(props) {
+    super(props)
+    this.state = {
+      models : []
+    };
+  }
 
   render() {
+    // axios.get(
+    //   'http://localhost:4000/all')
+    //   .then(res => {
+    //     this.setState()
+    //   });
     return(
       <div>
         <Button

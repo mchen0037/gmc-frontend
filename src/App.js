@@ -5,68 +5,10 @@ import TrainingSelection from './components/TrainingSelection.jsx';
 import TrainedPage from './components/isTrainedPage.jsx';
 import TestingPage from './components/TestingPage.jsx';
 // import {BrowserRouter, Route, Link, Switch} from "react-router-dom";
-// import axios from 'axios';
+import axios from 'axios';
 import queryString from 'query-string';
 
 // var data = require('./assets/js/fakedata.json');
-
-//From https://api.spotify.com/v1/me
-// https://api.spotify.com/v1/me/playlists
-let userInfoFromServer = {
-  user: {
-    display_name: 'yoboimightychen',
-    id: 'some_id_string',
-  },
-  playlists: [
-    {
-      id: 'some_playlist_id1',
-      name: "Twenty One Pilots Songs",
-      tracks: [
-        {
-          name: 'song 1',
-          duration: 1000
-        },
-        {
-          name: 'song 2',
-          duration: 2000
-        }
-      ]
-    },
-    {
-      id: 'some_playlist_id2',
-      name: "Top Country Songs",
-      tracks: [
-        {
-          name: 'song 3',
-          duration: 3000
-        },
-        {
-          name: 'song 4',
-          duration: 4000
-        }
-      ]
-    },
-    {
-      id: 'some_playlist_id3',
-      name: "My Mixtape",
-      tracks: [
-        {
-          name: 'song 5',
-          duration: 3000
-        },
-        {
-          name: 'song 6',
-          duration: 4000
-        },
-        {
-          name: 'song 7',
-          duration: 5000
-        }
-      ]
-    }
-  ]
-};
-
 
 class App extends Component {
 
@@ -100,6 +42,13 @@ class App extends Component {
 
   deleteModel() {
     //axios call to remove the model from the DB
+
+    axios.get(
+      'http://localhost:4000/delete/' + this.state.user.id)
+      .then(res => {
+        console.log(res.data)
+      });
+
     this.setState(
       {
         trained: false
@@ -122,7 +71,7 @@ class App extends Component {
     )
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
 
@@ -132,36 +81,57 @@ class App extends Component {
 
     fetch('https://api.spotify.com/v1/me', {
       headers: {'Authorization': 'Bearer ' + accessToken}
-    }).then(response => response.json()).then(data =>
-      this.setState( {
-        user: data
-      })
-    )
+    }).then(response => response.json()).then(data => {
+        this.setState( {
+          user: data
+        });
 
-    fetch('https://api.spotify.com/v1/me/playlists', {
-      headers: {'Authorization': 'Bearer ' + accessToken}
-    }).then(response => response.json()).then( data => {
-        let arrOfPlaylists = data.items.map(item => {
-          return item;
-        })
-        this.setState({playlists: arrOfPlaylists})
-        console.log(arrOfPlaylists)
+        axios.get(
+          'http://localhost:4000/models/' + data.id)
+          .then(res => {
+            res.data.result && this.nowTrained();
+            console.log("res.data:" ,res.data)
+          });
       }
     )
+
+    let getPlaylists_response = await
+      fetch('https://api.spotify.com/v1/me/playlists', {
+        headers: {'Authorization': 'Bearer ' + accessToken}
+      });
+
+    let getPlaylists_json = await getPlaylists_response.json();
+    // console.log("getPlaylists_response", getPlaylists_response)
+    // console.log("getPlaylists_json", getPlaylists_json)
+
+    var arrOfPlaylists = getPlaylists_json.items;
+    console.log("arrOfPlaylists", arrOfPlaylists)
+    this.setState({playlists: arrOfPlaylists});
+
+    // fetch('https://api.spotify.com/v1/me/playlists', {
+    //   headers: {'Authorization': 'Bearer ' + accessToken}
+    // }).then(response => response.json()).then( data => {
+    //     console.log("Data!!!!!!!!!!!!!!!", data);
+    //     let arrOfPlaylists = data.items.map(item => {
+    //       return item;
+    //     });
+    //     console.log("arrOfPlaylists@@", arrOfPlaylists);
+    //     this.setState({playlists: arrOfPlaylists});
+    //   }
+    // )
   }
 
   render() {
-    console.log(this.state)
+    console.log("App.js State:", this.state)
     return (
       <div className="App">
-
         <header className="App-header">
-          { !this.state.playlists[0] ?
+          { !this.state.playlists ?
             <Login handleLogin={this.loginToSpotify} user={this.state.user}/>
             :
             (!this.state.trained ?
               <div>
-                Hi {this.state.user.id}! Please train a model.
+                Hi {this.state.user.display_name}! Please train a model.
                 <TrainingSelection
                   playlists={this.state.playlists}
                   trained={this.nowTrained}
@@ -172,7 +142,11 @@ class App extends Component {
               :
               <div>
                 {this.state.testing ?
-                <TestingPage stopTesting={this.stopTesting}/>
+                <TestingPage
+                  stopTesting={this.stopTesting}
+                  token={this.state.token}
+                  user={this.state.user.id}
+                />
 
                 :
                 <div>
