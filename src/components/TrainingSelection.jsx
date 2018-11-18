@@ -33,6 +33,8 @@ class TrainingSelection extends Component {
 
   submitTrainingSelection() {
     //Do something with axios here
+    console.log('submit training selection!!');
+    this.props.trained();
   }
 
   render() {

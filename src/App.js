@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Login from './components/login.jsx';
 import TrainingSelection from './components/TrainingSelection.jsx';
+import TrainedPage from './components/isTrainedPage.jsx';
+import TestingPage from './components/TestingPage.jsx';
 
 // var data = require('./assets/js/fakedata.json');
 
@@ -9,7 +11,7 @@ import TrainingSelection from './components/TrainingSelection.jsx';
 // https://api.spotify.com/v1/me/playlists
 let userInfoFromServer = {
   user: {
-    display_name: 'nothing_faith',
+    display_name: 'yoboimightychen',
     id: 'some_id_string',
   },
   playlists: [
@@ -69,16 +71,55 @@ class App extends Component {
     super(props)
     this.state = {
       user: {},
-      playlists: {}
+      playlists: {},
+      trained: true,
+      testing: false
     }
     this.login = this.login.bind(this);
+    this.nowTrained = this.nowTrained.bind(this);
+    this.deleteModel = this.deleteModel.bind(this);
+    this.startTesting = this.startTesting.bind(this);
+    this.stopTesting = this.stopTesting.bind(this);
   }
 
   login() {
     this.setState(
-      { user: userInfoFromServer.user,
+      {
+        user: userInfoFromServer.user,
         playlists: userInfoFromServer.playlists
       });
+  }
+
+  nowTrained() {
+    this.setState(
+      {
+        trained: true
+      }
+    )
+  }
+
+  deleteModel() {
+    //axios call to remove the model from the DB
+    this.setState(
+      {
+        trained: false
+      }
+    )
+  }
+
+  startTesting() {
+    this.setState(
+      {
+        testing: true
+      }
+    )
+  }
+  stopTesting() {
+    this.setState(
+      {
+        testing: false
+      }
+    )
   }
 
   render() {
@@ -89,17 +130,31 @@ class App extends Component {
           { !this.state.user.display_name ?
             <Login handleLogin={this.login} user={this.state.user}/>
             :
-            <div>
-              <TrainingSelection
-                playlists={this.state.playlists}
-              />
-              {/* <div>{this.state.user.display_name} is signed in. </div>
-              {this.state.playlists.map( (playlist) =>
-                <li>{playlist.name}</li>
-              )} */}
-            </div>
-          }
 
+            (!this.state.trained ?
+              <div>
+                Welcome, {this.state.user.display_name}!
+                <TrainingSelection
+                  playlists={this.state.playlists}
+                  trained={this.nowTrained}
+                />
+              </div>
+              :
+              <div>
+                {this.state.testing ?
+                <TestingPage stopTesting={this.stopTesting}/>
+
+                :
+                <div>
+                  hey {this.state.user.display_name}! Your model is trained!
+                  <TrainedPage
+                    handleDelete={this.deleteModel}
+                    nowTesting={this.startTesting}/>
+                </div>
+                }
+              </div>
+            )
+          }
         </header>
       </div>
     );
