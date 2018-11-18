@@ -31,43 +31,68 @@ class TrainingSelection extends Component {
   }
 
 
-  submitTrainingSelection() {
+  async submitTrainingSelection() {
+    //get just the playlist with the good/bad name
     let good_playlist = this.props.playlists.filter(playlist => playlist.name === this.state.good)
     let bad_playlist = this.props.playlists.filter(playlist => playlist.name === this.state.bad)
 
-    fetch('https://api.spotify.com/v1/playlists/' + good_playlist[0].id + '/tracks', {
-      headers: {'Authorization': 'Bearer ' + this.props.token}
-    }).then(response => response.json()).then(data => {
-        var good_track_ids = data.items.map(item => {
-          return item.track.id;
-        });
-      }
-    )
-    // console.log(good_track_ids)
+    //call spoot api but wait for a response
+    let good_playlist_response = await
+      fetch('https://api.spotify.com/v1/playlists/' +
+      good_playlist[0].id + '/tracks',
+      {headers: {'Authorization': 'Bearer ' + this.props.token}
+    });
+    //jsonfy the playlist tracks and then get just the ids and store them into an array.
+    let good_playlist_json = await good_playlist_response.json();
+    let good_track_ids = good_playlist_json.items.map(item => {
+      return item.track.id;
+    })
 
-    fetch('https://api.spotify.com/v1/playlists/' + bad_playlist[0].id + '/tracks', {
-      headers: {'Authorization': 'Bearer ' + this.props.token}
-    }).then(response => response.json()).then(data => {
-        var good_track_ids = data.items.map(item => {
-          return item.track.id;
-        });
-      }
-    )
-    // console.log(bad_track_ids)
+    let bad_playlist_response = await
+      fetch('https://api.spotify.com/v1/playlists/' +
+      bad_playlist[0].id + '/tracks',
+      { headers: {'Authorization': 'Bearer ' + this.props.token}
+    })
+    let bad_playlist_json = await bad_playlist_response.json();
+    let bad_track_ids = bad_playlist_json.items.map(item => {
+      return item.track.id;
+    })
 
-    // axios.post(
-    //   'http://localhost:4000/train', audio_features)
-    //   .then(res => {
-    //     console.log(res.data)
-    //   });
+    // console.log(good_track_ids.toString())
+
+    let good_audio_features_response = await
+      fetch('https://api.spotify.com/v1/audio-features/?ids=' +
+      good_track_ids.toString(),
+      {headers: {'Authorization': 'Bearer ' + this.props.token}}
+    )
+    let good_audio_features = await good_audio_features_response.json();
+
+    let bad_audio_features_response = await
+      fetch('https://api.spotify.com/v1/audio-features/?ids=' +
+      bad_track_ids.toString(),
+      {headers: {'Authorization': 'Bearer ' + this.props.token}}
+    )
+    let bad_audio_features = await bad_audio_features_response.json();
+
+    // console.log("good_audio_features:",good_audio_features)
+
+    axios.post(
+      'http://localhost:4000/train', {
+        good: good_audio_features.audio_features,
+        bad: bad_audio_features.audio_features,
+        user: this.props.user
+      })
+      .then(res => {
+        console.log(res.data)
+      });
 
     //Do something with axios here
-    console.log('submit training selection!!');
+    // console.log('submit training selection!!');
     this.props.trained();
   }
 
   render() {
-    // console.log("props: " , this.props)
+    console.log("props: " , this.props)
     return(
       <div>
         Good Playlist:

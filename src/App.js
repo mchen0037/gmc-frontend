@@ -166,6 +166,7 @@ class App extends Component {
                   playlists={this.state.playlists}
                   trained={this.nowTrained}
                   token={this.state.token}
+                  user={this.state.user.id}
                 />
               </div>
               :
