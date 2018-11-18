@@ -11,8 +11,8 @@ class DropdownMenu extends Component {
   }
 
   chosePlaylist(name) {
-    this.props.handleClick()
     this.setState({status: name})
+    this.props.handleClick(name)
   }
 
   render() {

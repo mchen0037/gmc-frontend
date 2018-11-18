@@ -126,6 +126,10 @@ class App extends Component {
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
 
+    this.setState( {
+      token: accessToken
+    })
+
     fetch('https://api.spotify.com/v1/me', {
       headers: {'Authorization': 'Bearer ' + accessToken}
     }).then(response => response.json()).then(data =>
@@ -161,6 +165,7 @@ class App extends Component {
                 <TrainingSelection
                   playlists={this.state.playlists}
                   trained={this.nowTrained}
+                  token={this.state.token}
                 />
               </div>
               :
