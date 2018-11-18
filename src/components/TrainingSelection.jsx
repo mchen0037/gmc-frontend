@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 // import {DropdownButton, MenuItem} from 'react-bootstrap';
 import DropdownMenu from './DropdownMenu.jsx';
 import {Button} from 'react-bootstrap';
-
+import axios from 'axios';
 class TrainingSelection extends Component {
 
   constructor(props) {
@@ -32,13 +32,25 @@ class TrainingSelection extends Component {
 
 
   submitTrainingSelection() {
+    let audio_features = {
+      "danceability": 100
+    }
+
+    axios.post(
+      'http://localhost:4000/train', audio_features)
+      .then(res => {
+        console.log(res.data)
+      });
+
+
+
     //Do something with axios here
     console.log('submit training selection!!');
     this.props.trained();
   }
 
   render() {
-    // console.log("props: " , this.props)
+    console.log("props: " , this.props)
     return(
       <div>
         Good Playlist:

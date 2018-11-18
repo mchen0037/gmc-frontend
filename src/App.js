@@ -4,6 +4,9 @@ import Login from './components/login.jsx';
 import TrainingSelection from './components/TrainingSelection.jsx';
 import TrainedPage from './components/isTrainedPage.jsx';
 import TestingPage from './components/TestingPage.jsx';
+// import {BrowserRouter, Route, Link, Switch} from "react-router-dom";
+// import axios from 'axios';
+import queryString from 'query-string';
 
 // var data = require('./assets/js/fakedata.json');
 
@@ -71,23 +74,20 @@ class App extends Component {
     super(props)
     this.state = {
       user: {},
-      playlists: {},
-      trained: true,
-      testing: false
+      playlists: [],
+      trained: false,
+      testing: false,
+      token: ''
     }
-    this.login = this.login.bind(this);
+    this.loginToSpotify = this.loginToSpotify.bind(this);
     this.nowTrained = this.nowTrained.bind(this);
     this.deleteModel = this.deleteModel.bind(this);
     this.startTesting = this.startTesting.bind(this);
     this.stopTesting = this.stopTesting.bind(this);
   }
 
-  login() {
-    this.setState(
-      {
-        user: userInfoFromServer.user,
-        playlists: userInfoFromServer.playlists
-      });
+  loginToSpotify() {
+    window.location="http://localhost:8888/login"
   }
 
   nowTrained() {
@@ -122,18 +122,42 @@ class App extends Component {
     )
   }
 
+  componentDidMount() {
+    let parsed = queryString.parse(window.location.search);
+    let accessToken = parsed.access_token;
+
+    fetch('https://api.spotify.com/v1/me', {
+      headers: {'Authorization': 'Bearer ' + accessToken}
+    }).then(response => response.json()).then(data =>
+      this.setState( {
+        user: data
+      })
+    )
+
+    fetch('https://api.spotify.com/v1/me/playlists', {
+      headers: {'Authorization': 'Bearer ' + accessToken}
+    }).then(response => response.json()).then( data => {
+        let arrOfPlaylists = data.items.map(item => {
+          return item;
+        })
+        this.setState({playlists: arrOfPlaylists})
+        console.log(arrOfPlaylists)
+      }
+    )
+  }
+
   render() {
     console.log(this.state)
     return (
       <div className="App">
-        <header className="App-header">
-          { !this.state.user.display_name ?
-            <Login handleLogin={this.login} user={this.state.user}/>
-            :
 
+        <header className="App-header">
+          { !this.state.playlists[0] ?
+            <Login handleLogin={this.loginToSpotify} user={this.state.user}/>
+            :
             (!this.state.trained ?
               <div>
-                Welcome, {this.state.user.display_name}!
+                Hi {this.state.user.id}! Please train a model.
                 <TrainingSelection
                   playlists={this.state.playlists}
                   trained={this.nowTrained}
@@ -146,7 +170,7 @@ class App extends Component {
 
                 :
                 <div>
-                  hey {this.state.user.display_name}! Your model is trained!
+                  Hey {this.state.user.id}! Your model is trained!
                   <TrainedPage
                     handleDelete={this.deleteModel}
                     nowTesting={this.startTesting}/>
