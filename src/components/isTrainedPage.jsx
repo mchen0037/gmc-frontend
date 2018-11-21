@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
-import axios from 'axios';
 
 class TrainedPage extends Component {
 
@@ -12,11 +11,6 @@ class TrainedPage extends Component {
   }
 
   render() {
-    // axios.get(
-    //   'http://localhost:4000/all')
-    //   .then(res => {
-    //     this.setState()
-    //   });
     return(
       <div>
         <Button

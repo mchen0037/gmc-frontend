@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import {DropdownButton, MenuItem} from 'react-bootstrap';
 import DropdownMenu from './DropdownMenu.jsx';
 import {Button} from 'react-bootstrap';
 import axios from 'axios';
@@ -83,10 +82,10 @@ class TrainingSelection extends Component {
         user: this.props.user
       })
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
       });
 
-    //Do something with axios here
+    //FIXME: Only set trained to true if it was successfuly trained.
     // console.log('submit training selection!!');
     this.props.trained();
   }

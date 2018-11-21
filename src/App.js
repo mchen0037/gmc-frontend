@@ -4,11 +4,9 @@ import Login from './components/login.jsx';
 import TrainingSelection from './components/TrainingSelection.jsx';
 import TrainedPage from './components/isTrainedPage.jsx';
 import TestingPage from './components/TestingPage.jsx';
-// import {BrowserRouter, Route, Link, Switch} from "react-router-dom";
 import axios from 'axios';
 import queryString from 'query-string';
 
-// var data = require('./assets/js/fakedata.json');
 
 class App extends Component {
 
@@ -32,6 +30,7 @@ class App extends Component {
     window.location="http://localhost:8888/login"
   }
 
+  //FIXME: Only switch to trained if there exists one in the DB.
   nowTrained() {
     this.setState(
       {
@@ -41,12 +40,10 @@ class App extends Component {
   }
 
   deleteModel() {
-    //axios call to remove the model from the DB
-
     axios.get(
       'http://localhost:4000/delete/' + this.state.user.id)
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
       });
 
     this.setState(
@@ -79,6 +76,7 @@ class App extends Component {
       token: accessToken
     })
 
+    //Once I get the user info, then check if they have any models.
     fetch('https://api.spotify.com/v1/me', {
       headers: {'Authorization': 'Bearer ' + accessToken}
     }).then(response => response.json()).then(data => {
@@ -90,39 +88,24 @@ class App extends Component {
           'http://localhost:4000/models/' + data.id)
           .then(res => {
             res.data.result && this.nowTrained();
-            console.log("res.data:" ,res.data)
+            // console.log("res.data:", res.data)
           });
       }
     )
 
+    // Also grab the list of playlists that they have.
     let getPlaylists_response = await
       fetch('https://api.spotify.com/v1/me/playlists', {
         headers: {'Authorization': 'Bearer ' + accessToken}
       });
 
     let getPlaylists_json = await getPlaylists_response.json();
-    // console.log("getPlaylists_response", getPlaylists_response)
-    // console.log("getPlaylists_json", getPlaylists_json)
 
     var arrOfPlaylists = getPlaylists_json.items;
-    console.log("arrOfPlaylists", arrOfPlaylists)
     this.setState({playlists: arrOfPlaylists});
-
-    // fetch('https://api.spotify.com/v1/me/playlists', {
-    //   headers: {'Authorization': 'Bearer ' + accessToken}
-    // }).then(response => response.json()).then( data => {
-    //     console.log("Data!!!!!!!!!!!!!!!", data);
-    //     let arrOfPlaylists = data.items.map(item => {
-    //       return item;
-    //     });
-    //     console.log("arrOfPlaylists@@", arrOfPlaylists);
-    //     this.setState({playlists: arrOfPlaylists});
-    //   }
-    // )
   }
 
   render() {
-    console.log("App.js State:", this.state)
     return (
       <div className="App">
         <header className="App-header">

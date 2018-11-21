@@ -4,9 +4,9 @@ import {Button} from 'react-bootstrap';
 
 class TestingPage extends Component {
 
-  constructor(props) {
-    super(props)
-  }
+  // constructor(props) {
+  //   super(props)
+  // }
 
   render() {
     console.log('Results props:' ,this.props)
