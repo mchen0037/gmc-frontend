@@ -2,6 +2,7 @@
   "name": "gmc-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://mchen0037.github.io/react-tutorial",
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
@@ -21,6 +22,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
