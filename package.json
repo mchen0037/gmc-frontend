@@ -2,7 +2,7 @@
   "name": "gmc-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mchen0037.github.io/react-tutorial",
+  "homepage": "https://mchen0037.github.io/gmc-frontend",
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
