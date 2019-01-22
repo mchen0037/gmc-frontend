@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   loginToSpotify() {
-    window.location="http://localhost:8888/login"
+    window.location="https://gmc-oauth.herokuapp.com/login"
   }
 
   //FIXME: Only switch to trained if there exists one in the DB.
