@@ -27,6 +27,7 @@ class App extends Component {
   }
 
   loginToSpotify() {
+    // window.location="http://localhost:8888/login"
     window.location="https://gmc-oauth.herokuapp.com/login"
   }
 
@@ -41,7 +42,7 @@ class App extends Component {
 
   deleteModel() {
     axios.get(
-      'http://localhost:4000/delete/' + this.state.user.id)
+      'https://gmc-backend.herokuapp.com/delete/' + this.state.user.id)
       .then(res => {
         // console.log(res.data)
       });
@@ -85,7 +86,7 @@ class App extends Component {
         });
 
         axios.get(
-          'http://localhost:4000/models/' + data.id)
+          'https://gmc-backend.herokuapp.com/models/' + data.id)
           .then(res => {
             res.data.result && this.nowTrained();
             // console.log("res.data:", res.data)
