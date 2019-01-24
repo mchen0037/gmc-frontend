@@ -4,6 +4,8 @@ import Form from './Form.jsx';
 import Results from './Results.jsx';
 import axios from 'axios';
 
+let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+
 class TestingPage extends Component {
 
   constructor(props) {
@@ -58,7 +60,7 @@ class TestingPage extends Component {
 
     var counter = -1
     axios.post(
-      'http://localhost:4000/predict/' + this.props.user, {
+      BACKEND_SERVER + 'predict/' + this.props.user, {
         test: test_features.audio_features
       })
       .then( (res) => {

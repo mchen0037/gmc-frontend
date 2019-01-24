@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import DropdownMenu from './DropdownMenu.jsx';
 import {Button} from 'react-bootstrap';
 import axios from 'axios';
-class TrainingSelection extends Component {
 
+let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+
+class TrainingSelection extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -76,7 +78,7 @@ class TrainingSelection extends Component {
     // console.log("good_audio_features:",good_audio_features)
 
     axios.post(
-      'http://localhost:4000/train', {
+      BACKEND_SERVER + '/train', {
         good: good_audio_features.audio_features,
         bad: bad_audio_features.audio_features,
         user: this.props.user

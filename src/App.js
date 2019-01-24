@@ -8,6 +8,9 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 
+let OAUTH_SERVER = process.env.GMC_OAUTH_SERVER
+let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+
 class App extends Component {
 
   constructor(props) {
@@ -28,7 +31,7 @@ class App extends Component {
 
   loginToSpotify() {
     // window.location="http://localhost:8888/login"
-    window.location="https://gmc-oauth.herokuapp.com/login"
+    window.location= OAUTH_SERVER + "/login"
   }
 
   //FIXME: Only switch to trained if there exists one in the DB.
@@ -42,7 +45,7 @@ class App extends Component {
 
   deleteModel() {
     axios.get(
-      'https://gmc-backend.herokuapp.com/delete/' + this.state.user.id)
+      BACKEND_SERVER + '/delete/' + this.state.user.id)
       .then(res => {
         // console.log(res.data)
       });
