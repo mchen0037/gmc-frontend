@@ -61,7 +61,7 @@ class TestingPage extends Component {
 
     var counter = -1
     axios.post(
-      BACKEND_SERVER + 'predict/' + this.props.user, {
+      BACKEND_SERVER + '/predict/' + this.props.user, {
         test: test_features.audio_features
       })
       .then( (res) => {
