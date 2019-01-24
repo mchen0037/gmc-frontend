@@ -94,7 +94,7 @@ class TrainingSelection extends Component {
   }
 
   render() {
-    console.log("props: " , this.props)
+    // console.log("props: " , this.props)
     return(
       <div>
         Good Playlist:

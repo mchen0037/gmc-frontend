@@ -9,7 +9,7 @@ class TestingPage extends Component {
   // }
 
   render() {
-    console.log('Results props:' ,this.props)
+    // console.log('Results props:' ,this.props)
     return(
       <Table>
         <thead>

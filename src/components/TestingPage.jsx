@@ -39,7 +39,7 @@ class TestingPage extends Component {
       return song.key.substring(14);
     })
 
-    console.log(ids)
+    // console.log(ids)
 
     let test_features_response = await
       fetch('https://api.spotify.com/v1/audio-features/?ids=' +
@@ -57,7 +57,7 @@ class TestingPage extends Component {
     let names = names_json.tracks.map(track => {
       return track.name;
     })
-    console.log("names:", names)
+    // console.log("names:", names)
 
     var counter = -1
     axios.post(
@@ -77,17 +77,17 @@ class TestingPage extends Component {
           // console.log("<<<<<<<<<<<<<<<<", res)
 
         })
-        console.log(songs)
+        // console.log(songs)
         this.setState({songs: songs})
 
       });
 
     //axios call here
-    console.log("testing songs!!");
+    // console.log("testing songs!!");
   }
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return(
       <div>
         <Button
