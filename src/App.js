@@ -8,8 +8,11 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 
-let OAUTH_SERVER = process.env.GMC_OAUTH_SERVER
-let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+// let OAUTH_SERVER = process.env.GMC_OAUTH_SERVER
+// let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+
+let OAUTH_SERVER = 'https://gmc-oauth.herokuapp.com'
+let BACKEND_SERVER = 'https://gmc-backend.herokuapp.com'
 
 class App extends Component {
 

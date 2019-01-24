@@ -4,7 +4,8 @@ import Form from './Form.jsx';
 import Results from './Results.jsx';
 import axios from 'axios';
 
-let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+// let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+let BACKEND_SERVER = 'https://gmc-backend.herokuapp.com'
 
 class TestingPage extends Component {
 

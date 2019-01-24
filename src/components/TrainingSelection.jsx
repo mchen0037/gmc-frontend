@@ -3,7 +3,8 @@ import DropdownMenu from './DropdownMenu.jsx';
 import {Button} from 'react-bootstrap';
 import axios from 'axios';
 
-let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+// let BACKEND_SERVER = process.env.GMC_BACKEND_SERVER
+let BACKEND_SERVER = 'https://gmc-backend.herokuapp.com'
 
 class TrainingSelection extends Component {
   constructor(props) {
